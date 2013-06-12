@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<title>Soma Pi</title>
+
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/style.css" />
+
+<link rel="shortcut icon" type="image/x-icon" href="{% get_static_prefix %}img/favicon.ico" />
+
+<link rel='apple-touch-icon' href='{% get_static_prefix %}img/apple-touch-icon.png' />
+
+</head>
+<body>
+
+<div id='content'>
+{% block content %}
+  Hello World
+
+{% endblock %}
+</div>
+
+</body>
+</html>
