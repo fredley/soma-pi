@@ -12,6 +12,37 @@ $('#search-box').keyup(function() {
     });
 });
 
+function update_info(){
+  $.ajax("/ajax/home",{
+    type: "GET",
+  }).always(function (response) {
+      results = JSON.parse(response['responseText']);
+      if(results['success']){
+          if(results['status'] == 'stop'){
+              $('#info-station-outer').hide(); 
+              $('#info-track-outer').hide(); 
+              $('#info-status').text("Stopped");
+              $('#stop-button').attr('disabled','disabled');
+          }else{
+              $('#info-station-outer').show(); 
+              $('#info-track-outer').show(); 
+              $('#info-station').text(results['station']); 
+              $('#info-track').text(results['song']);    
+              $('#info-status').text(results['status']);   
+              $('#stop-button').removeAttr('disabled');
+              $('#info-status').text("Playing");
+          }
+      }else{
+          $('#info-status').text("Error: " + results['error']);
+          $('#info-station').text('');
+          $('#info-track').text('');
+      }
+    setTimeout(function(){update_info();}, 10000);
+    });
+};
+
+update_info();
+
 {% endblock %}
 
 {% block content %}
@@ -22,13 +53,16 @@ $('#search-box').keyup(function() {
   <div class="container">
     <h1>Soma Pi</h1>
     <p class="lead">SomaFM Control Station</p>
-<p class='fixed'>Status: {% if status %}<i class='icon-thumbs-up icon-white'></i> Good!{% else %}<i class='icon-thumbs-down icon-white'></i> Error.{% endif %}
-{% if status_message != "" %}{{ status_message }}{% endif %}
-</p>
-      <p>Artist: Title</p>
+      <pre>Status: <span id='info-status'></span>
+<span id='info-station-outer'>Listening to: <span id='info-station'></span></span>
+<span id='info-track-outer'>Current Track: <span id='info-track'></span></span></pre>
       <p>
-        <a class="btn btn-danger"><i class='icon-stop icon-white'></i> Stop</a>
-        <a class="btn btn-inverse"><i class='icon-random icon-white'></i> Random</a>
+        <a class="btn btn-danger" href='{% url "stop" %}' id='stop-button'>
+            <i class='icon-stop icon-white'></i> Stop
+        </a>
+        <a class="btn btn-inverse" href='{% url "random" %}'>
+            <i class='icon-random icon-white'></i> Random
+        </a>
       </p>
   </div>
 </header>
@@ -50,7 +84,7 @@ $('#search-box').keyup(function() {
   <div class="thumbnail">
     <h3>{{ station.name }}</h3>
     <img src='{{ station.image }}' alt="" class="img-rounded">
-    <a class='btn btn-large btn-danger' href='{% url "play" station.position %}'><i class='icon-play icon-white'></i> Play</a>
+    <a class='btn btn-large btn-danger' href='{% url "play" station.id %}'><i class='icon-play icon-white'></i> Play</a>
     <p>{{ station.description }}</p>
   </div>
 </li>

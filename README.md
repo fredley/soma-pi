@@ -5,7 +5,8 @@ A frontend for soma-pi, a SomaFM Pi Jukebox. This will provide a web-frontend th
 
 Installation:
 
-* `sudo apt-get install mpd mpc python-mpd`
+* `sudo apt-get install mpd mpc python-mpd python-setuptools`
+* `sudo easy_install pip`
 * `pip install django`
 * `git://github.com/fredley/soma-pi.git`
 * `cd soma-pi`
