@@ -22,6 +22,9 @@ $('#search-box').keyup(function() {
   <div class="container">
     <h1>Soma Pi</h1>
     <p class="lead">SomaFM Control Station</p>
+<p class='fixed'>Status: {% if status %}<i class='icon-thumbs-up icon-white'></i> Good!{% else %}<i class='icon-thumbs-down icon-white'></i> Error.{% endif %}
+{% if status_message != "" %}{{ status_message }}{% endif %}
+</p>
       <p>Artist: Title</p>
       <p>
         <a class="btn btn-danger"><i class='icon-stop icon-white'></i> Stop</a>
