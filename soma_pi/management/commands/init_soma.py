@@ -15,7 +15,7 @@ class Command(BaseCommand):
          'url': "",
          'image': "http://somafm.com/img/lush-x120.jpg",
           },
-        {'name': "Drone Zome",
+        {'name': "Drone Zone",
          'description': "Served best chilled, safe with most medications. Atmospheric textures with minimal beats.",
          'url': "",
          'image': "http://somafm.com/img/dronezone120.jpg",

@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-
 {% block jquery %}
 
 $('#search-box').keyup(function() {
@@ -11,10 +10,7 @@ $('#search-box').keyup(function() {
             $(this).show();
         }
     });
-    // reflow page
-
 });
-
 
 {% endblock %}
 
@@ -35,11 +31,9 @@ $('#search-box').keyup(function() {
 </header>
 
 <div class='row'>
-
-<form class="form-search">
-  <input type="text" id="search-box" class="span12 search-query" placeholder="Filter" />
-</form>
-
+  <form class="form-search">
+    <input type="text" id="search-box" class="span12 search-query" placeholder="Filter" />
+  </form>
 </div>
 
 <ul class="thumbnails">
@@ -50,18 +44,18 @@ $('#search-box').keyup(function() {
 {% endif %}
 
 <li class="span4 station" name="{{ station.name }}">
-    <div class="thumbnail">
-      <img src='{{ station.image }}' alt="" class="img-circle">
-      <h3>{{ station.name }}</h3>
-      <p>{{ station.description }}</p>
-    </div>
-  </li>
+  <div class="thumbnail">
+    <h3>{{ station.name }}</h3>
+    <img src='{{ station.image }}' alt="" class="img-rounded">
+    <a class='btn btn-large btn-danger' href='{% url "play" station.position %}'><i class='icon-play icon-white'></i> Play</a>
+    <p>{{ station.description }}</p>
+  </div>
+</li>
 
 {% endfor %}
 
 </ul>
 
-</div>
 </div>
 
 {% endblock %}

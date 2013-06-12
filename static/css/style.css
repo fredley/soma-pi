@@ -1,11 +1,12 @@
 body{
     background: #333;
-    color:#eee;
+    color:#ccc;
 }
 
 .jumbotron{
     position: relative;
-    background: #000;
+    background: #000 url('../img/banner.png') no-repeat center;
+    background-size:auto 100%;
     padding:40px 10px;
     margin-top: -20px;
     margin-right: -200px;
@@ -23,9 +24,24 @@ body{
     border-bottom:1px solid #333;
     box-shadow: 0 1px 3px rgba(0,0,0,0.4);
     padding:10px;
+    height: 330px;
+}
+.thumbnail h3{
+    margin-top:0;
+    text-align:center;
+}
+.thumbnail p{
+    color:#888;
+}
+.thumbnail .btn-large{
+    display: block;
+    clear:both;
+    text-align: center;
+    width:80px;
+    margin:20px auto;
 }
 
-.img-circle{
+.img-rounded{
     border:1px solid rgba(255,255,255,0.1);
     box-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
@@ -52,10 +68,39 @@ body{
         margin-left:0;
         width:100%;
     }
+    .thumbnail{
+        height: 190px;
+        position: relative;
+    }
+    .thumbnail h3{
+        position: absolute;
+        top:0;
+        right:0;
+        width:70%;
+    }
+    .thumbnail p{
+        margin-top:30px;
+    }
+    .thumbnail img{
+        float:left;
+        margin-right:15px;
+    }
+    .thumbnail a{
+        float:left;
+    }
+}
+
+@media (max-width: 979px) and (min-width: 768px){
+    .thumbnail{
+        height: 370px;
+    }
 }
 
 @media (min-width: 1200px) {
     #search-box{
         margin-left:30px;
     }
+    .thumbnail{
+        height: 300px;
     }
+}

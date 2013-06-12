@@ -7,6 +7,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'soma_pi.views.home', name='home'),
-    
+    url(r'^play/(?P<playlist_no>\d+)/$', 'soma_pi.views.play', name='play'),
     url(r'^admin/', include(admin.site.urls)),
 )
