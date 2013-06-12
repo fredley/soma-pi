@@ -1,12 +1,11 @@
 from django.conf.urls import patterns, include, url
 
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
     url(r'^$', 'soma_pi.views.home', name='home'),
     url(r'^play/(?P<playlist_no>\d+)/$', 'soma_pi.views.play', name='play'),
+    url(r'^stop/$', 'soma_pi.views.stop', name='stop'),
     url(r'^admin/', include(admin.site.urls)),
 )
