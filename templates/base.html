@@ -6,12 +6,25 @@
 <head>
 
 <title>Soma Pi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/style.css" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/style.css" media="screen" />
+
+<script src="{% get_static_prefix %}js/jquery.min.js"></script>
 
 <link rel="shortcut icon" type="image/x-icon" href="{% get_static_prefix %}img/favicon.ico" />
 
 <link rel='apple-touch-icon' href='{% get_static_prefix %}img/apple-touch-icon.png' />
+
+<script>
+$(document).ready(function() {
+
+  {% block jquery %}
+  {% endblock %}
+
+});
+</script>
 
 </head>
 <body>

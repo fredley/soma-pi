@@ -1,7 +1,67 @@
 {% extends "base.html" %}
 
+
+{% block jquery %}
+
+$('#search-box').keyup(function() {
+    $('.station').each(function(){
+        if($(this).attr('name').toLowerCase().indexOf($('#search-box').val().toLowerCase()) == -1){
+            $(this).hide();
+        }else{
+            $(this).show();
+        }
+    });
+    // reflow page
+
+});
+
+
+{% endblock %}
+
 {% block content %}
 
-Hello Index!
+<div class='container'>
+
+<header class="jumbotron" id="overview">
+  <div class="container">
+    <h1>Soma Pi</h1>
+    <p class="lead">SomaFM Control Station</p>
+      <p>Artist: Title</p>
+      <p>
+        <a class="btn btn-danger"><i class='icon-stop icon-white'></i> Stop</a>
+        <a class="btn btn-inverse"><i class='icon-random icon-white'></i> Random</a>
+      </p>
+  </div>
+</header>
+
+<div class='row'>
+
+<form class="form-search">
+  <input type="text" id="search-box" class="span12 search-query" placeholder="Filter" />
+</form>
+
+</div>
+
+<ul class="thumbnails">
+
+{% for station in stations %}
+
+{% if forloop.counter0|divisibleby:3 and not forloop.counter0 == 0 %}
+{% endif %}
+
+<li class="span4 station" name="{{ station.name }}">
+    <div class="thumbnail">
+      <img src='{{ station.image }}' alt="" class="img-circle">
+      <h3>{{ station.name }}</h3>
+      <p>{{ station.description }}</p>
+    </div>
+  </li>
+
+{% endfor %}
+
+</ul>
+
+</div>
+</div>
 
 {% endblock %}
