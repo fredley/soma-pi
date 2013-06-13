@@ -7,13 +7,13 @@ A frontend for a [SomaFM](http://somafm.com/) Pi Jukebox. Soma-pi will provide a
 ###Setup/Installation:
 
 * Not covered in this guide: Setting up ssh/wireless/sound card. These topics are covered in this [lifehacker guide](http://lifehacker.com/5978594/turn-a-raspberry-pi-into-an-airplay-receiver-for-streaming-music-in-your-living-room).
-* Assuming you've got the Pi set up with wireless/ssh/sound card as you want, you'll need to install the required tools:  
+* Assuming you've got the Pi set up as you want, you'll need to install the required tools:  
 `sudo apt-get install mpd mpc python-mpd python-setuptools screen`
 * Test that `mpc` is working by entering the command `sudo mpc`. You should see output like  
 *volume: 80%   repeat: off   random: off   single: off   consume: off*  
 There are [futher instructions for setting up/testing mpc](http://www.gmpa.it/it9xxs/?p=727) if you want them.
 * Next you'll need to use `easy_install` to install Django:  
-`easy_install django`
+`sudo easy_install django`
 * Now clone this repository:  
 `git clone git://github.com/fredley/soma-pi.git`  
 `cd soma-pi`
