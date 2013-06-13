@@ -1,5 +1,4 @@
 import urllib2
-import logging
 
 import xml.etree.ElementTree as ET
 from optparse import make_option
@@ -7,8 +6,6 @@ from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 
 from soma_pi.models import Station
-
-logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     help = 'Initializes the database with all SomaFM stations'
