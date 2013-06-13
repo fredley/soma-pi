@@ -2,6 +2,8 @@
 
 {% block jquery %}
 
+var timeout = 5000;
+
 $('#search-box').keyup(function() {
     $('.station').each(function(){
         if($(this).attr('name').toLowerCase().indexOf($('#search-box').val().toLowerCase()) == -1){
@@ -12,10 +14,71 @@ $('#search-box').keyup(function() {
     });
 });
 
-function update_info(){
-  $.ajax("/ajax/home",{
+function ajax_stop(){
+    $('a[station-id]').removeAttr('disabled');
+    $('#stop-button').attr('disabled','disabled');
+    $.ajax("/ajax/stop/",{ type: "GET" });
+    $('#info-station-outer').hide(); 
+    $('#info-track-outer').hide(); 
+    $('#info-status').text("Stopped");
+    return false;
+};
+
+function ajax_play(station_id){
+  $('a[station-id]').removeAttr('disabled'); 
+  $('#stop-button').removeAttr('disabled');
+  $('a[station-id=' + station_id + ']').attr('disabled','disabled');
+  $.ajax("/ajax/play/",{
+    type: "GET",
+    data: {'station_id': station_id},
+  }).always(function (response) {
+      results = JSON.parse(response['responseText']);
+      $('#info-track').text('Loading...');
+      $('#info-station').text('Loading...');
+      if(!results['success']){
+        $('a[station-id=' + station_id + ']').removeAttr('disabled');
+      }
+      setTimeout(function(){update_info(false);}, 1000);
+    });
+  return false;
+};
+
+function ajax_play_random(){
+    $('a[station-id]').removeAttr('disabled');
+    $('#stop-button').removeAttr('disabled');
+    $('#random-button').attr('disabled','disabled');
+    $.ajax("/ajax/playrandom/",{ type: "GET" 
+    }).always(function(response){
+        results = JSON.parse(response['responseText']);
+        $('a[station-id=' + results['station'] + ']').attr('disabled','disabled');
+        $('#random-button').removeAttr('disabled');
+        $('#info-track').text('Loading...');
+        $('#info-station').text('Loading...');
+        setTimeout(function(){update_info(false);}, 1000);
+    });
+    return false;
+};
+
+$('a[station-id]').click(function(e){
+    e.preventDefault();
+    ajax_play($(this).attr('station-id'));
+});
+
+$('#stop-button').click(function(e){
+    e.preventDefault();
+    ajax_stop();
+});
+
+$('#random-button').click(function(e){
+    e.preventDefault();
+    ajax_play_random();
+});
+
+function update_info(retry){
+  $.ajax("/ajax/home/",{
     type: "GET",
   }).always(function (response) {
+      timeout = 5000;
       results = JSON.parse(response['responseText']);
       if(results['success']){
           if(results['status'] == 'stop'){
@@ -23,11 +86,22 @@ function update_info(){
               $('#info-track-outer').hide(); 
               $('#info-status').text("Stopped");
               $('#stop-button').attr('disabled','disabled');
+              $('a[station-id]').removeAttr('disabled'); 
           }else{
               $('#info-station-outer').show(); 
               $('#info-track-outer').show(); 
-              $('#info-station').text(results['station']); 
-              $('#info-track').text(results['song']);    
+              if(results['song'] == ""){
+                timeout = 1000;
+                $('#info-track').text('Loading...');
+              }else{
+                $('#info-track').text(results['song']);
+              }
+              if(results['station'] == ""){
+                timeout = 1000;
+                $('#info-station').text('Loading...');
+              }else{
+                $('#info-station').text(results['station']);
+              }
               $('#info-status').text(results['status']);   
               $('#stop-button').removeAttr('disabled');
               $('#info-status').text("Playing");
@@ -36,12 +110,15 @@ function update_info(){
           $('#info-status').text("Error: " + results['error']);
           $('#info-station').text('');
           $('#info-track').text('');
+          $('a[station-id]').removeAttr('disabled'); 
       }
-    setTimeout(function(){update_info();}, 5000);
+    if(retry){
+      setTimeout(function(){update_info(true);}, timeout);
+    }
     });
 };
 
-update_info();
+update_info(true);
 
 {% endblock %}
 
@@ -60,7 +137,7 @@ update_info();
         <a class="btn btn-danger" href='{% url "stop" %}' id='stop-button'>
             <i class='icon-stop icon-white'></i> Stop
         </a>
-        <a class="btn btn-inverse" href='{% url "random" %}'>
+        <a class="btn btn-inverse" href='{% url "random" %}' id='random-button'>
             <i class='icon-random icon-white'></i> Random
         </a>
       </p>
@@ -84,7 +161,7 @@ update_info();
   <div class="thumbnail">
     <h3>{{ station.name }}</h3>
     <img src='{{ station.image }}' alt="" class="img-rounded">
-    <a class='btn btn-large btn-danger' href='{% url "play" station.id %}'><i class='icon-play icon-white'></i> Play</a>
+    <a station-id='{{ station.id }}' class='btn btn-large btn-danger' href='{% url "play" station.id %}'><i class='icon-play icon-white'></i> Play</a>
     <p>{{ station.description }}</p>
   </div>
 </li>

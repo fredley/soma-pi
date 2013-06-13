@@ -47,23 +47,49 @@ def stop(request):
     return HttpResponseRedirect(reverse('home'))
 
 def ajax(request,method):
-    if method == 'home':
-        return_data = ajax_home_data()
-
-    return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
-
-def ajax_home_data():
     try:
         client = mpd.MPDClient()
         client.connect("localhost", 6600)
     except:
-        return {'success': False, 
-                'error': "Could not communicate with MPD",
-                'status': "stop" } 
+        return_data = {'success': False, 
+                       'error': "Could not communicate with MPD",
+                       'status': "stop" } 
+        return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
+    
+    if method == 'home':
+        return_data = ajax_home_data(client)
+    elif method == 'play':
+        return_data = ajax_play(client,int(request.GET['station_id']))
+    elif method == 'stop':
+        return_data = ajax_stop(client)
+    elif method == 'playrandom':
+        return_data =  ajax_play(client,Station.objects.order_by('?')[0].id)
 
+    client.disconnect()
+    return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
+
+def ajax_play(client,station_id):
+    try:
+        station = Station.objects.get(id=station_id)
+        client.clear()
+        logger.debug("Playing "+station.name)
+        client.add(station.url)
+        client.play()
+    except:
+        return { 'success': False } 
+    return {'success': True, 'station': station_id }
+
+def ajax_stop(client):
+    try:
+        client.stop()
+        client.clear()
+    except:
+        return { 'success': False } 
+    return {'success': True }
+
+def ajax_home_data(client):
     try:
         cs = client.currentsong()
-        logger.debug(cs)
         song = cs['title'] if 'title' in cs else 'Loading...'
         if 'file' not in cs: raise
         name = cs['name']
@@ -72,8 +98,6 @@ def ajax_home_data():
                 'status': client.status()['state'] } 
 
     status = client.status()
-
-    client.disconnect()
 
     return {'success': True, 
             'status': status['state'],
