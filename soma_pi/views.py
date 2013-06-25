@@ -76,7 +76,6 @@ def ajax_play(client,station_id):
         station.play_count = station.play_count + 1;
         station.save()
         client.clear()
-        logger.debug("Playing "+station.name)
         client.add(station.url)
         client.play()
     except:
