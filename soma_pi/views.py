@@ -13,12 +13,14 @@ logger = logging.getLogger(__name__)
 
 def home(request):
     return render_to_response('index.html', 
-                              { 'stations': Station.objects.all() },
+                              { 'stations': Station.objects.all().order_by('-play_count') },
                               context_instance=RequestContext(request))
 
 def play(request,station_id):
     # Interact with media player
     station = get_object_or_404(Station, pk=station_id)
+    station.play_count = station.play_count + 1;
+    station.save()
     try:
         client = mpd.MPDClient()
         client.connect("localhost", 6600)
@@ -71,6 +73,8 @@ def ajax(request,method):
 def ajax_play(client,station_id):
     try:
         station = Station.objects.get(id=station_id)
+        station.play_count = station.play_count + 1;
+        station.save()
         client.clear()
         logger.debug("Playing "+station.name)
         client.add(station.url)

@@ -8,6 +8,7 @@ class Station(models.Model):
     image = models.CharField(max_length=200)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
+    play_count = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.name
