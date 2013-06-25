@@ -43,6 +43,19 @@ function ajax_play(station_id){
   return false;
 };
 
+function ajax_delete(station_id){
+  $.ajax("/ajax/delete/",{
+    type: "GET",
+    data: {'station_id': station_id},
+  }).always(function (response) {
+      results = JSON.parse(response['responseText']);
+      if(results['success']){
+        $('a[station-id=' + station_id + ']').parent().parent().fadeOut();
+      }
+    });
+  return false;
+};
+
 function ajax_play_random(){
     $('a[station-id]').removeAttr('disabled');
     $('#stop-button').removeAttr('disabled');
@@ -62,6 +75,13 @@ function ajax_play_random(){
 $('a[station-id]').click(function(e){
     e.preventDefault();
     ajax_play($(this).attr('station-id'));
+});
+
+$('a[delete-station-id]').click(function(e){
+    e.preventDefault();
+    if(confirm("Are you sure you want to delete that station?")){
+      ajax_delete($(this).attr('delete-station-id'));
+    }
 });
 
 $('#stop-button').click(function(e){
@@ -159,6 +179,7 @@ update_info(true);
 
 <li class="span4 station" name="{{ station.name }}">
   <div class="thumbnail">
+    <a delete-station-id='{{ station.id }}' rel='nofollow' class='btn btn-large btn-inverse btn-delete' href='{% url "delete" station.id %}'><i class='icon-remove-circle icon-white'></i></a>
     <h3>{{ station.name }}</h3>
     <img src='{{ station.image }}' alt="" class="img-rounded">
     <a station-id='{{ station.id }}' class='btn btn-large btn-danger' href='{% url "play" station.id %}'><i class='icon-play icon-white'></i> Play</a>

@@ -25,6 +25,11 @@ def new(request):
             new_station = form.save()
     return HttpResponseRedirect(reverse('home'))
 
+def delete(request,station_id):
+    station = get_object_or_404(Station, pk=station_id)
+    station.delete()
+    return HttpResponseRedirect(reverse('home'))
+    
 def play(request,station_id):
     # Interact with media player
     station = get_object_or_404(Station, pk=station_id)
@@ -58,6 +63,14 @@ def stop(request):
     return HttpResponseRedirect(reverse('home'))
 
 def ajax(request,method):
+    if method == 'delete':
+        return_data = ajax_delete(int(request.GET['station_id']))
+    elif method == 'new':
+        pass
+        
+    if return_data:
+        return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
+
     try:
         client = mpd.MPDClient()
         client.connect("localhost", 6600)
@@ -90,6 +103,14 @@ def ajax_play(client,station_id):
     except:
         return { 'success': False } 
     return {'success': True, 'station': station_id }
+
+def ajax_delete(station_id):
+    try:
+        station = Station.objects.get(id=station_id)
+        station.delete()
+    except:
+        return {'success':False}
+    return {'success': True}
 
 def ajax_stop(client):
     try:
