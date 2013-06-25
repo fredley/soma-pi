@@ -168,6 +168,20 @@ update_info(true);
 
 {% endfor %}
 
+<li class="span4 station" id='station-form'>
+  <div class='thumbnail last'>
+    <form action='{% url "new" %}' method='post'>
+      {% csrf_token %}
+      <ul>
+        {{ form.as_ul }}
+        <li class='submit-li'>
+          <input type='submit' name='submit' value='Add Station' class='btn btn-large btn-danger' id='btn-submit'/>
+        </li>
+      </ul>
+    </form>
+  </div>
+</li>
+
 </ul>
 
 </div>

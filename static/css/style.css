@@ -35,6 +35,9 @@ pre{
     height: 330px;
     background: #222;
 }
+.thumbnail.last{
+    height:auto;
+}
 .thumbnail h3{
     margin-top:0;
     text-align:center;
@@ -66,6 +69,16 @@ pre{
     border-bottom:1px solid #444;
     background: #333;
     color:#eee;
+}
+
+#station-form li{
+    list-style: none;
+    display: block;
+}
+
+#btn-submit{
+    width: 221px;
+    margin-left: 0;
 }
 
 @media (max-width: 767px){

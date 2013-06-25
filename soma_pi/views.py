@@ -8,13 +8,22 @@ from django.template import RequestContext
 from django.utils import simplejson
 
 from soma_pi.models import Station
+from soma_pi.forms import StationForm
 
 logger = logging.getLogger(__name__)
 
 def home(request):
     return render_to_response('index.html', 
-                              { 'stations': Station.objects.all().order_by('-play_count') },
+                              { 'stations': Station.objects.all().order_by('-play_count'),
+                                'form': StationForm() },
                               context_instance=RequestContext(request))
+
+def new(request):
+    if request.method == 'POST':
+        form = StationForm(request.POST)
+        if form.is_valid():
+            new_station = form.save()
+    return HttpResponseRedirect(reverse('home'))
 
 def play(request,station_id):
     # Interact with media player
