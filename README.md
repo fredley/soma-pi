@@ -19,9 +19,11 @@ There are [futher instructions for setting up/testing mpc](http://www.gmpa.it/it
 `cd soma-pi`
 * Now set up the Django app with the following commands. This will create the database:  
 `./manage.py syncdb`  
-During this step you will be asked for a superuser name and password. Do enter these, as you'll want to use them to add entries to the database.
+During this step you will be asked for a superuser name and password. You can use these to access the admin should you want to.
 * [optional] This will pre-populate the database with all of the SomaFM stations :  
 `./manage.py init_soma`
 * You're now ready to roll! Start up a screen by typing `screen`. Running the server in the screen means that it will keep running after `ssh` is disconnected. You need to use `sudo` for this command if you want to use port 80 (recommended).  
 `sudo ./manage.py runserver 0.0.0.0:80` 
-* You should now be able to access soma-pi from your web browser, point it at the IP of your Pi. You can go to `http://192.168.pi.ip/admin` and log in with your credentials from set up to add/edit stations. 
+* You should now be able to access soma-pi from your web browser, point it at the IP of your Pi. You can go to `http://192.168.pi.ip/admin` and log in with your credentials to access the admin.
+* Setting up a better web server is left as an excercise for the enthusiast. I can personally recommend [gunicorn](http://gunicorn.org/).
+* **Bonus Pebble Round** If you have [Glance for Pebble](http://www.finebyte.co.uk/?page_id=9) you can configure [Tasker](http://tasker.dinglisch.net/) to operate Soma-Pi with your watch buttons. Simply set up tasks according to [Christopher Stein's guide](https://plus.google.com/u/0/109925457418000128828/posts/WKjzY7rktKz), using the `HTTP GET` action and entering the URL to be (for example) `192.168.pi.ip/random` or `192.168.pi.ip/stop` conditional on `%key`. Congratulations, you have now glimpsed geekvana.
