@@ -63,10 +63,11 @@ def stop(request):
     return HttpResponseRedirect(reverse('home'))
 
 def ajax(request,method):
+    return_data = False
     if method == 'delete':
         return_data = ajax_delete(int(request.GET['station_id']))
     elif method == 'new':
-        pass
+        return_data = ajax_new(request.GET)
         
     if return_data:
         return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
@@ -103,6 +104,18 @@ def ajax_play(client,station_id):
     except:
         return { 'success': False } 
     return {'success': True, 'station': station_id }
+
+def ajax_new(data):
+    new_station = Station()
+    new_station.url = data['url']
+    new_station.name = data['name']
+    new_station.image = data['image']
+    new_station.description = data['description']
+    try:
+        new_station.save()
+    except:
+        return {'success': False}
+    return {'success': True, 'station': new_station.id }
 
 def ajax_delete(station_id):
     try:
